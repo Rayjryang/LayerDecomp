@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generative Image Layer Decomposition with Visual Effects</title>
+
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <style>
+      
+      .references {
+      text-align: center; 
+      margin: 50px auto; 
+      font-size: 1rem;
+      width: 60%; 
+      background-color: #f9f9f9; 
+      padding: 20px; 
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      }
+
+      .references ol {
+          display: inline-block; 
+          text-align: left;
+          padding-left: 20px;
+          margin: 0 auto;
+      }
+
+      .references li {
+          margin-bottom: 5px; 
+      }
+
+      .custom-list {
+            list-style: none; 
+            padding-left: 0; 
+        }
+        .custom-list {
+            counter-reset: custom-counter;
+      }
+
+       
+        .acknowledgment {
+            background-color: #d7dee2; 
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px auto; 
+            width: 60%; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            text-align: left;
+        }
+
+        .acknowledgment h2 {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .acknowledgment p {
+            line-height: 1.6;
+            text-align: left; 
+        }
+
+        .acknowledgment a {
+            color: #0073e6; 
+            text-decoration: none;
+        }
+
+        .acknowledgment a:hover {
+            text-decoration: underline;
+        }
+
+       
+       
+      .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 60%; 
+            max-height: 80%; 
+            overflow-y: auto; 
+            border-radius: 5px;
+        }
+
+       
+        .modal-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; 
+            margin-bottom: 20px;
+        }
+
+        .modal-item img {
+            max-width: 150px;
+            height: auto;
+            margin-right: 10px; 
+            border-radius: 5px;
+        }
+
+        .modal-item a {
+            color: #0073e6;
+            text-decoration: none;
+            word-break: break-word; 
+        }
+
+        .modal-item a:hover {
+            text-decoration: underline;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+  </style>
+
+
+
+</head>
+<body>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Generative Image Layer Decomposition with Visual Effects</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <span>Jinrui Yang</a></span><sup>1,2,*</sup>,</span>
+            <span class="author-block">
+              <span>Qing Liu</a></span><sup>2</sup>,</span>
+            <span class="author-block">
+              <span>Yijun Li</a></span><sup>2</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Soo Ye Kim</a></span><sup>2</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Daniil Pakhomov</a></span><sup>2</sup>,</span>
+            </span>
+            <br> 
+            <span class="author-block">
+              <span>Mengwei Ren</a></span><sup>2</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Jianming Zhang</a></span><sup>2</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Zhe Lin</a></span><sup>2</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Cihang Xie</a></span><sup>1</sup>,</span>
+            </span>
+            <span class="author-block">
+              <span>Yuyin Zhou</a></span><sup>1</sup>.</span>
+            </span>
+          </div>
+ 
+        
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <span><sup>1</sup>UC Santa Cruz</a></span>,</span>
+            <span class="author-block">
+              <span><sup>2</sup>Adobe Research</a></span></span>
+          
+          
+          </div>
+          
+          <div class="equal-contribution-advising-note">
+            <p>* This work was done when Jinrui Yang was a research intern at Adobe Research.</p>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://rayjryang.github.io/LayerDecomp"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fa-solidassasas fa-face-smiling-hands"></i>
+                    <img src="./resources/ar.svg" alt="img" style="width: 100%; height: 100%" /> 
+                  </span>
+                  <span>Coming soon</span>
+                </a>
+              </span>
+         
+              
+              <!-- BibTeX.-->
+              <span class="link-block">
+                <a href="#citation-block" class="external-link button is-normal is-rounded is-dark">
+                    <span>BibTeX</span>
+                </a>
+            </span>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<br>
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">Overview of LayerDecomp</h2></center>
+      <center><img src="./resources/teaser_v2.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle" style="text-align: left;">
+        (a) Given an input image and a binary object mask, our model is able to decompose the image into a clean background layer and a transparent foreground layer with preserved visual effects such as shadows and reflections. (b) Subsequently, our decomposition empowers complex and controllable layer-wise editing such as spatial, color and/or style editing.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<br>
+
+<section class="section">
+  <div class="container">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-left">
+          <p>
+            Recent advancements in large generative models, particularly diffusion-based methods, have significantly enhanced the capabilities of image editing. However, achieving precise control over image composition tasks remains a challenge.  Layered representations, which allow for independent editing of image components, are essential for user-driven content creation, yet existing approaches often struggle to decompose image into plausible layers with accurately retained transparent visual effects such as shadows and reflections. We propose <b>LayerDecomp</b>, a generative framework for image layer decomposition which outputs photorealistic clean backgrounds and high-quality transparent foregrounds with faithfully preserved visual effects. To enable effective training, we first introduce a dataset preparation pipeline that automatically scales up simulated multi-layer data with synthesized visual effects. To further enhance real-world applicability, we supplement this simulated dataset with camera-captured images containing natural visual effects.  Additionally, we propose a consistency loss which enforces the model to learn accurate representations for the transparent foreground layer when ground-truth annotations are not available. Our method achieves superior quality in layer decomposition, outperforming existing approaches in object removal and spatial editing tasks across several benchmarks and multiple user studies, unlocking various creative possibilities for layer-wise image editing. The project page is <b>https://rayjryang.github.io/LayerDecomp/</b>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<br>
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">The framework of LayerDecomp </h2></center>
+      <center><img src="./resources/frame_work_5.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle has-text-left">
+        <b>The framework of LayerDecomp.</b> The model takes four inputs: two conditional inputs, including a composite image and an object mask, and two noisy latent representations of the background and foreground layers. During training, we use simulated image triplets alongside camera-captured background-composite image pairs. We also introduce a pixel-space consistency loss to ensure that natural visual effects such as shadows and refelctions are faithfully preserved in the transparent foreground layer.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<br><br><br>
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">Object removal - comparison with mask-based methods</h2></center>
+      <center><img src="./resources/remove_mask.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle has-text-left">
+        <b>Object removal - comparison with mask-based methods.</b> Our model, using tight input masks, generates more visually plausible results with fewer artifacts compared to ControlNet Inpainting<span style="color: blue;">[1]</span>, SD-XL Inpainting<span style="color: blue;">[2]</span>, and PowerPaint<span style="color: blue;">[3]</span>, which all require loose mask input. Besides, our model delivers coherent foreground layers and supports more advanced downstream editing tasks.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<br><br><br>
+
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">Object removal - comparison with instruction-driven methods.</h2></center>
+      <center><img src="./resources/remove_instruction1.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle has-text-left">
+        <b>Object removal - comparison with instruction-driven methods.</b> Combining with a text-based grounding method, our model can effectively remove target objects and preserve background integrity, while existing instruction-based editing methods, such as Emu-Edit<span style="color: blue;">[4]</span>, MGIE<span style="color: blue;">[5]</span>, and OmniGen<span style="color: blue;">[6]</span>, may struggle to fully remove the target or maintain background consistency.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<br><br><br>
+
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">Object spatial editing</h2></center>
+      <center><img src="./resources/spatial_edit.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle has-text-left">
+        <b>Object spatial editing.</b> Our model enables precise object moving and resizing with seamless handling of visual effects, resulting in highly effective and realistic edits that preserve content identity. When applied to examples released by specific works, such as DiffusionHandle<span style="color: blue;">[7]</span> and DesignEdit<span style="color: blue;">[8]</span>, our model also achieves satisfying results.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<br><br><br>
+
+<section class="hero teaser">
+  <div class="container">
+    <div class="hero-body">
+      <center><h2 class="title is-3">Multi-layer Decomposition and Creative layer-editing</h2></center>
+      <center><img src="./resources/creative_edit_v4.png" alt="alt text"
+                        style="width: 80%; object-fit: cover; max-width:80%;"></a></center>
+      <h2 class="subtitle has-text-left">
+        <b>Multi-layer Decomposition and Creative layer-editing.</b> By sequentially applying our model, we can decompose multiple foreground layers with distinct visual effects, which can then be used for further creative editing tasks.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section id="citation-block" style="margin-top: 50px;">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{xx,
+  author    = {Jinrui Yang and Qing Liu and Yijun Li and Soo Ye Kim and Daniil Pakhomov and Mengwei Ren and Jianming Zhang and Zhe Lin and Cihang Xie and Yuyin Zhou},
+  title     = {Generative Image Layer Decomposition with Visual Effects},
+  journal   = {arXiv preprint arXiv:2411.xxx},
+  year      = {2024},
+}</code></pre>
+  </div>
+</section>
+
+
+
+<section class="references">
+  <h2><b>References</b></h2>
+  <ol class="custom-list">
+    <li>[1] Lvmin Zhang, Anyi Rao, and Maneesh Agrawala. Adding
+      conditional control to text-to-image diffusion models. In
+      Proceedings of the IEEE/CVF International Conference on
+      Computer Vision, pages 3836-3847, 2023.</li>
+    <li>[2] Robin Rombach, Andreas Blattmann, Dominik Lorenz,
+      Patrick Esser, and Bj¨orn Ommer. High-resolution image
+      synthesis with latent diffusion models. In Proceedings of
+      the IEEE/CVF conference on computer vision and pattern
+      recognition, pages 10684-10695, 2022.</li>
+    <li>[3] Junhao Zhuang, Yanhong Zeng, Wenran Liu, Chun Yuan,
+      and Kai Chen. A task is worth one word: Learning with task
+      prompts for high-quality versatile image inpainting. arXiv
+      preprint arXiv:2312.03594, 2023.</li>
+    <li>[4] Shelly Sheynin, Adam Polyak, Uriel Singer, Yuval Kirstain,
+      Amit Zohar, Oron Ashual, Devi Parikh, and Yaniv Taigman.
+      Emu edit: Precise image editing via recognition and generation tasks. In Proceedings of the IEEE/CVF Conference
+      on Computer Vision and Pattern Recognition, pages 8871-8879, 2024.</li>
+    <li>[5] Tsu-Jui Fu, Wenze Hu, Xianzhi Du, William Yang Wang,
+      Yinfei Yang, and Zhe Gan. Guiding instruction-based image editing via multimodal large language models. In International Conference on Learning Representations (ICLR),
+      2024.</li>
+    <li>[6] Shitao Xiao, Yueze Wang, Junjie Zhou, Huaying Yuan, Xingrun Xing, Ruiran Yan, Shuting Wang, Tiejun Huang, and
+      Zheng Liu. Omnigen: Unified image generation. arXiv
+      preprint arXiv:2409.11340, 2024.</li>
+    <li>[7] Karran Pandey, Paul Guerrero, Matheus Gadelha, Yannick
+      Hold-Geoffroy, Karan Singh, and Niloy J Mitra. Diffusion
+      handles enabling 3d edits for diffusion models by lifting activations to 3d. In Proceedings of the IEEE/CVF Conference
+      on Computer Vision and Pattern Recognition, pages 7695-7704, 2024.</li>
+    <li>[8] Yueru Jia, Yuhui Yuan, Aosong Cheng, Chuke Wang, Ji
+      Li, Huizhu Jia, and Shanghang Zhang. Designedit: Multi-layered latent decomposition and fusion for unified & accu-
+      rate image editing. arXiv preprint arXiv:2403.14487, 2024.</li>
+  </ol>
+</section>
+
+
+<br>
+
+<section class="acknowledgment">
+    <h2>ACKNOWLEDGMENT</h2>
+    <p>
+        We thank owners of images on this site (<a href="#" id="open-modal">link</a>) for sharing their valuable assets.
+    </p>
+</section>
+
+
+<div id="image-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-modal">&times;</span>
+
+
+     
+      <div class="modal-item">
+        <img src="./resources/unsplash/ahtziri-lagarde-2_gtlsgz80w-unsplash.jpg" alt="">
+        <a href="https://unsplash.com/photos/a-bottle-of-whiskey-sitting-next-to-a-shot-glass-2_gtlsgz80w" target="_blank">
+            https://unsplash.com/photos/a-bottle-of-whiskey-sitting-next-to-a-shot-glass-2_gtlsgz80w
+        </a>
+    </div>
+
+    <div class="modal-item">
+        <img src="./resources/unsplash/birger-strahl-qQ4uU3RSnuA-unsplash.jpg" alt="">
+        <a href="https://unsplash.com/photos/brown-lioness-on-water-during-daytime-qQ4uU3RSnuA" target="_blank">
+            https://unsplash.com/photos/brown-lioness-on-water-during-daytime-qQ4uU3RSnuA
+        </a>
+    </div>
+
+    <div class="modal-item">
+        <img src="./resources/unsplash/dorde-pandurevic-5IGIHyKQ9Xg-unsplash.jpg" alt="">
+        <a href="https://unsplash.com/photos/a-red-house-sitting-on-top-of-a-lake-next-to-a-forest-5IGIHyKQ9Xg" target="_blank">
+          https://unsplash.com/photos/a-red-house-sitting-on-top-of-a-lake-next-to-a-forest-5IGIHyKQ9Xg
+        </a>
+    </div>
+
+
+    <div class="modal-item">
+      <img src="./resources/unsplash/esra-korkmaz-1UwSIZ63z-4-unsplash.jpg" alt="">
+      <a href="https://unsplash.com/photos/a-house-sitting-on-top-of-a-lake-next-to-a-forest-1UwSIZ63z-4
+      " target="_blank">
+      https://unsplash.com/photos/a-house-sitting-on-top-of-a-lake-next-to-a-forest-1UwSIZ63z-4
+      </a>
+  </div>
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/hrushikesh-chavan-UfIQnvGQQtc-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/a-cup-of-coffee-sitting-on-top-of-a-table-UfIQnvGQQtc
+    " target="_blank">
+    https://unsplash.com/photos/a-cup-of-coffee-sitting-on-top-of-a-table-UfIQnvGQQtc
+    </a>
+  </div>
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/james-kovin-CnTco09pHKM-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/a-group-of-hot-air-balloons-flying-over-a-lake-CnTco09pHKM
+    " target="_blank">
+    https://unsplash.com/photos/a-group-of-hot-air-balloons-flying-over-a-lake-CnTco09pHKM
+    </a>
+  </div>
+
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/luke-miller-omIdyhp25es-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/a-boathouse-in-the-middle-of-a-body-of-water-omIdyhp25es
+    " target="_blank">
+    https://unsplash.com/photos/a-boathouse-in-the-middle-of-a-body-of-water-omIdyhp25es
+    </a>
+  </div>
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/mick-haupt-akZJ_QoTI5k-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/a-man-and-a-child-playing-on-the-beach-akZJ_QoTI5k
+    " target="_blank">
+    https://unsplash.com/photos/a-man-and-a-child-playing-on-the-beach-akZJ_QoTI5k
+    </a>
+  </div>
+
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/ray-hennessy-OjE4RtaibFc-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/american-bald-eagle-over-body-of-water-OjE4RtaibFc
+    " target="_blank">
+    https://unsplash.com/photos/american-bald-eagle-over-body-of-water-OjE4RtaibFc
+    </a>
+  </div>
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/robert-woeger-aFaaOPR3je4-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/white-swan-on-water-during-daytime-aFaaOPR3je4" target="_blank">
+      https://unsplash.com/photos/white-swan-on-water-during-daytime-aFaaOPR3je4
+    </a>
+  </div>
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/thimo-van-leeuwen-y3q-oo3wBKo-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/person-holding-clear-drinking-glass-with-brown-liquid-y3q-oo3wBKo
+    " target="_blank">
+    https://unsplash.com/photos/person-holding-clear-drinking-glass-with-brown-liquid-y3q-oo3wBKo
+    </a>
+  </div>
+
+
+  <div class="modal-item">
+    <img src="./resources/unsplash/zach-reiner-fvbu-7ekG3A-unsplash.jpg" alt="">
+    <a href="https://unsplash.com/photos/silhouette-photography-of-driftwood-on-seashore-fvbu-7ekG3A
+    " target="_blank">
+    https://unsplash.com/photos/silhouette-photography-of-driftwood-on-seashore-fvbu-7ekG3A
+    </a>
+  </div>
+
+  </div>
+</div>
+
+
+</div>
+
+<script>
+    const modal = document.getElementById("image-modal");
+    const openModal = document.getElementById("open-modal");
+    const closeModal = document.getElementById("close-modal");
+
+    openModal.onclick = function(event) {
+        event.preventDefault(); 
+        modal.style.display = "block";
+    };
+
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    };
+
+   
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+</script>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Based on the following <a href="http://nerfies.github.io">template</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
